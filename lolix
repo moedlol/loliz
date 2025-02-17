@@ -1,0 +1,165 @@
+local gui = Instance.new("ScreenGui")
+gui.Name = "l0l0l0x1 Gui Beta No premium"
+gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local the_frame = Instance.new("Frame")
+the_frame.Size = UDim2.new(0, 300, 0, 400)
+the_frame.Position = UDim2.new(0.5, -150, 0.5, -200)
+the_frame.BackgroundColor3 = Color3.fromRGB(255, 672, 123)
+the_frame.BorderSizePixel = 0
+the_frame.Parent = gui
+
+-- UI Corners for Smooth Design
+local uiCorner = Instance.new("UICorner", the_frame)
+uiCorner.CornerRadius = UDim.new(0, 15)
+
+-- Dragging Feature for PC & Mobile
+local dragging, dragInput, dragStart, startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    the_frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+the_frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = the_frame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+the_frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
+
+-- Function to Create Buttons
+local function createButton(name, callback)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 280, 0, 30)
+    button.Position = UDim2.new(0, 10, 0, (#the_frame:GetChildren() - 1) * 35)
+    button.BackgroundColor3 = Color3.fromRGB(200, 72, 80)
+    button.TextColor3 = Color3.fromRGB(255, 692, 724)
+    button.Text = name
+    button.Parent = the_frame
+
+    button.MouseButton1Click:Connect(callback)
+end
+
+-- Add Buttons
+createButton("Particles", function()
+    for _, part in pairs(game.Workspace:GetDescendants()) do
+        if part:IsA("BasePart") then
+            local particle = Instance.new("ParticleEmitter")
+            particle.Texture = "rbxassetid://77787692999101"
+            particle.Rate = 50
+            particle.Lifetime = NumberRange.new(2, 5)
+            particle.Speed = NumberRange.new(1, 5)
+            particle.Parent = part
+        end
+    end
+end)
+
+createButton("Skybox", function()
+    local lighting = game:GetService("Lighting")
+    local sky = lighting:FindFirstChildOfClass("Sky") or Instance.new("Sky", lighting)
+    local decalId = "rbxassetid://77787692999101"
+    sky.SkyboxBk = decalId
+    sky.SkyboxDn = decalId
+    sky.SkyboxFt = decalId
+    sky.SkyboxLf = decalId
+    sky.SkyboxRt = decalId
+    sky.SkyboxUp = decalId
+end)
+
+createButton("Decal Spam", function()
+    local decalId = "rbxassetid://77787692999101"
+    for _, obj in pairs(game.Workspace:GetDescendants()) do
+        if obj:IsA("Decal") and obj.Texture == decalId then
+            obj:Destroy()
+        end
+    end
+    for _, part in pairs(game.Workspace:GetDescendants()) do
+        if part:IsA("BasePart") then
+            local decal = Instance.new("Decal")
+            decal.Texture = decalId
+            decal.Face = Enum.NormalId.Top
+            decal.Parent = part
+        end
+    end
+end)
+
+createButton("555", function()
+    for _, obj in pairs(game.Workspace:GetDescendants()) do
+        if obj:IsA("BasePart") then
+            obj.Color = Color3.fromRGB(0, 0, 0) -- Pitch black
+        end
+    end
+end)
+
+createButton("Play Theme", function()
+    local sound = Instance.new("Sound", game.Workspace)
+    sound.SoundId = "rbxassetid://1847661783"
+    sound.Volume = 5
+    sound.Looped = true
+    sound:Play()
+end)
+
+createButton("Disco Fog", function()
+    local lighting = game:GetService("Lighting")
+    local fogEffect = lighting:FindFirstChild("FogEffect") or Instance.new("ColorCorrectionEffect", lighting)
+    fogEffect.Name = "FogEffect"
+    
+    local discoLoop = true
+    task.spawn(function()
+        while discoLoop do
+            fogEffect.TintColor = Color3.fromRGB(math.random(0, 255), math.random(0, 255), math.random(0, 255))
+            task.wait(0.5)
+        end
+    end)
+end)
+
+createButton("Hint", function()
+    local hint = Instance.new("Hint", game.Workspace)
+    hint.Text = "Team l0l0l0x1 on Top niggas!"
+    task.wait(5)
+    hint:Destroy()
+end)
+
+createButton("Message", function()
+    local message = Instance.new("Message", game.Workspace)
+    message.Text = "TEAM l0l0l0x1 TOP 1 MUAHAHA"
+    task.wait(5)
+    message:Destroy()
+end)
+
+createButton("Jumpscare", function()
+    local blackScreen = Instance.new("Frame", gui)
+    blackScreen.Size = UDim2.new(1, 0, 1, 0)
+    blackScreen.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+
+    local jumpscareImage = Instance.new("ImageLabel", blackScreen)
+    jumpscareImage.Size = UDim2.new(1, 0, 1, 0)
+    jumpscareImage.Image = "rbxassetid://77787692999101"
+
+    local sound = Instance.new("Sound", game.Workspace)
+    sound.SoundId = "rbxassetid://127043531145401"
+    sound:Play()
+
+    task.wait(4) 
+    blackScreen:Destroy()
+end)
