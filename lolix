@@ -135,14 +135,14 @@ end)
 
 createButton("Hint", function()
     local hint = Instance.new("Hint", game.Workspace)
-    hint.Text = "Team l0l0l0x1 on Top niggas!"
+    hint.Text = "Team BaconX/N00BPARZ ON TOP HAHAHA)
     task.wait(5)
     hint:Destroy()
 end)
 
 createButton("Message", function()
     local message = Instance.new("Message", game.Workspace)
-    message.Text = "TEAM l0l0l0x1 TOP 1 MUAHAHA"
+    message.Text = "TEAM N00BPARZ TOP 1 MUAHAHA"
     task.wait(5)
     message:Destroy()
 end)
@@ -154,10 +154,10 @@ createButton("Jumpscare", function()
 
     local jumpscareImage = Instance.new("ImageLabel", blackScreen)
     jumpscareImage.Size = UDim2.new(1, 0, 1, 0)
-    jumpscareImage.Image = "rbxassetid://77787692999101"
+    jumpscareImage.Image = "rbxassetid://129137730992885"
 
     local sound = Instance.new("Sound", game.Workspace)
-    sound.SoundId = "rbxassetid://127043531145401"
+    sound.SoundId = "rbxassetid://18260230947"
     sound:Play()
 
     task.wait(4) 
