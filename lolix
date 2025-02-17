@@ -1,59 +1,80 @@
-local gui = Instance.new("ScreenGui")
-gui.Name = "l0l0l0x1 Gui Beta No premium"
-gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+-- Initialize the GUI
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "CustomGui"
+screenGui.Parent = player:WaitForChild("PlayerGui")
 
+-- Create the main frame
 local the_frame = Instance.new("Frame")
 the_frame.Size = UDim2.new(0, 300, 0, 400)
-the_frame.Position = UDim2.new(0.5, -150, 0.5, -200)
-the_frame.BackgroundColor3 = Color3.fromRGB(255, 672, 123)
-the_frame.BorderSizePixel = 0
-the_frame.Parent = gui
+the_frame.Position = UDim2.new(0, 50, 0, 50)
+the_frame.BackgroundColor3 = Color3.fromRGB(200, 72, 80)
+the_frame.Parent = screenGui
 
--- UI Corners for Smooth Design
-local uiCorner = Instance.new("UICorner", the_frame)
-uiCorner.CornerRadius = UDim.new(0, 15)
+-- Title Bar
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 30)
+title.BackgroundColor3 = Color3.fromRGB(255, 200, 170) -- Slightly darker peach
+title.Text = "l0l0l0x1 GUI"
+title.TextSize = 20
+title.Font = Enum.Font.SourceSansBold
+title.TextColor3 = Color3.fromRGB(0, 0, 0)
+title.Parent = the_frame
 
--- Dragging Feature for PC & Mobile
-local dragging, dragInput, dragStart, startPos
+-- Draggable functionality (for PC and Mobile)
+local dragToggle = false
+local dragStart = nil
+local dragPos = nil
+local dragInput = nil
 
-local function update(input)
+-- Function to update the frame position
+local function updateInput(input)
     local delta = input.Position - dragStart
-    the_frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    the_frame.Position = UDim2.new(dragPos.X.Scale, delta.X, dragPos.Y.Scale, delta.Y)
 end
 
-the_frame.InputBegan:Connect(function(input)
+-- Start dragging on input start (either mouse or touch)
+local function onInputStart(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
+        dragToggle = true
         dragStart = input.Position
-        startPos = the_frame.Position
-
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
+        dragPos = the_frame.Position
     end
-end)
+end
 
-the_frame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
+-- Stop dragging on input end (either mouse or touch)
+local function onInputEnd(input)
+    if input.UserInputState == Enum.UserInputState.End then
+        dragToggle = false
     end
-end)
+end
 
+-- Update dragging position for both mouse and touch
+local function onInputChanged(input)
+    if dragToggle and (input == dragInput) then
+        updateInput(input)
+    end
+end
+
+-- Connect the events for mouse and touch input
+title.InputBegan:Connect(onInputStart)
+title.InputEnded:Connect(onInputEnd)
+title.InputChanged:Connect(onInputChanged)
+
+-- PC and Mobile Touch input support
 game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        update(input)
+    if dragToggle then
+        onInputChanged(input)
     end
 end)
 
--- Function to Create Buttons
+-- Function to create buttons
 local function createButton(name, callback)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(0, 280, 0, 30)
-    button.Position = UDim2.new(0, 10, 0, (#the_frame:GetChildren() - 1) * 35)
+    button.Position = UDim2.new(0, 10, 0, (#the_frame:GetChildren() - 1) * 35 + 30) -- Added 30 to avoid overlap with the title
     button.BackgroundColor3 = Color3.fromRGB(200, 72, 80)
-    button.TextColor3 = Color3.fromRGB(255, 692, 724)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.Text = name
     button.Parent = the_frame
 
@@ -76,7 +97,16 @@ end)
 
 createButton("Skybox", function()
     local lighting = game:GetService("Lighting")
-    local sky = lighting:FindFirstChildOfClass("Sky") or Instance.new("Sky", lighting)
+    
+    -- Remove existing skybox if there is one
+    for _, obj in pairs(lighting:GetChildren()) do
+        if obj:IsA("Sky") then
+            obj:Destroy()
+        end
+    end
+    
+    -- Apply new skybox
+    local sky = Instance.new("Sky")
     local decalId = "rbxassetid://77787692999101"
     sky.SkyboxBk = decalId
     sky.SkyboxDn = decalId
@@ -84,6 +114,7 @@ createButton("Skybox", function()
     sky.SkyboxLf = decalId
     sky.SkyboxRt = decalId
     sky.SkyboxUp = decalId
+    sky.Parent = lighting
 end)
 
 createButton("Decal Spam", function()
@@ -113,7 +144,7 @@ end)
 
 createButton("Play Theme", function()
     local sound = Instance.new("Sound", game.Workspace)
-    sound.SoundId = "rbxassetid://1847661783"
+    sound.SoundId = "rbxassetid://1839246711"
     sound.Volume = 5
     sound.Looped = true
     sound:Play()
@@ -148,7 +179,7 @@ createButton("Message", function()
 end)
 
 createButton("Jumpscare", function()
-    local blackScreen = Instance.new("Frame", gui)
+    local blackScreen = Instance.new("Frame", screenGui)
     blackScreen.Size = UDim2.new(1, 0, 1, 0)
     blackScreen.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 
