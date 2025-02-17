@@ -132,7 +132,7 @@ createButton("Disco Fog", function()
         end
     end)
 end)
-Team
+
 createButton("Hint", function()
     local hint = Instance.new("Hint", game.Workspace)
     hint.Text = " BaconX/N00BPARZ ON TOP HAHAHA"
